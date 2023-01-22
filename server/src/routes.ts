@@ -4,6 +4,7 @@ import { prisma } from './lib/prisma'
 import dayjs from 'dayjs';
 
 export async function appRoutes(app: FastifyInstance){
+
   app.post('/habits', async (request)=> {
     const createHabitBody = z.object({
       title: z.string(),
@@ -73,5 +74,81 @@ export async function appRoutes(app: FastifyInstance){
       completedHabits
     }
   })
+
+  //completar / nao completar um habito
+
+  app.patch('/habits/:id/toggle', async (request) =>{
+    const toggleHabitParams = z.object({
+      id: z.string().uuid(),
+    })
+
+    const {id} = toggleHabitParams.parse(request.params)
+    // logica para permitir so atualizar habitos na data do dia, nao sendo retroativo
+    const today = dayjs().startOf('day').toDate();
+
+    let day = await prisma.day.findUnique({
+      where: {
+        date: today,
+      }
+    })
+
+    if(!day){
+      day = await prisma.day.create({
+        data: {
+          date: today,
+        }
+      })
+    }
+
+    const dayHabit = await prisma.dayHabit.findUnique({
+      where: {
+        day_id_habit_id: {
+          day_id: day.id,
+          habit_id: id,
+        }
+      }
+    })
+
+    if(dayHabit){
+      //se tiver o habito no dia, remove a marcacao
+      await prisma.dayHabit.delete({
+        where: {
+          id: dayHabit.id,
+        }
+      })
+    }else{
+      await prisma.dayHabit.create({
+        data: {
+          day_id: day.id,
+          habit_id: id,
+        }
+      })
+    }
+
+   
+  })
+
+
+  app.get('/summary', async () => {
+    //retornar um array de objetos [ { date , amount, completed}, {}, {}]
+
+    const summary = await prisma.$queryRaw`
+    SELECT d.id, d.date, ( 
+      SELECT 
+      cast(count(*) as float)
+      from day_habits dh where dh.day_id = d.id
+    ) as completed, (
+      SELECT 
+      cast(count(*) as float)
+      from habit_week_days hw 
+      join habits h on h.id = hw.habit_id
+      where hw.week_day = cast( strftime('%w', d.date/1000.0, 'unixepoch') as int) and h.created_at <= d.date
+    ) as amount
+    from days d
+
+    `
+
+    return summary;
+  });
 }
 
