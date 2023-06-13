@@ -66,7 +66,6 @@ export function Header() {
             <Dialog.Title className="text-3xl leading-tight font-extrabold">
               Configuracoes
             </Dialog.Title>
-
            <Config />
           </Dialog.Content>
         </Dialog.Portal>
@@ -79,8 +78,6 @@ export function Header() {
       </div>
       <a href="/login"><SignOut size={32} /></a>
       
-
-     
     </div>
   );
 }
