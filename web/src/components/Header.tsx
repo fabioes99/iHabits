@@ -1,4 +1,4 @@
-import { Plus, X, Gear } from "phosphor-react";
+import { Plus, X, Gear, User, SignOut } from "phosphor-react";
 import { useState } from "react";
 import * as Dialog from '@radix-ui/react-dialog';
 
@@ -72,6 +72,13 @@ export function Header() {
         </Dialog.Portal>
 
       </Dialog.Root>
+
+      <User size={32} />
+      <div>
+        Bem Vindo Fabio!
+      </div>
+      <a href="/login"><SignOut size={32} /></a>
+      
 
      
     </div>
