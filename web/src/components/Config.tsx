@@ -5,8 +5,7 @@ import { FormEvent } from "react";
 
 export function Config() {  
 
- async function createNewHabit(event: FormEvent){
-    event.preventDefault()
+  function createNewHabit(){
 
     alert('Configuracoes atualizadas com sucesso');
   }
@@ -61,13 +60,15 @@ export function Config() {
               Permite Agenda
             </span>
           </Checkbox.Root>
+
+          <div className="text-purple-500 underline hover:text-white hover:no-underline">
+            <a href="/info"  >Personalizar informacoes</a>
+          </div>
+         
        
       </div>
 
-
-    
-
-    <button type="submit" className="mt-6 rounded-lg p-4 flex items-center justify-center gap-3 font-semibold bg-green-600 hover:bg-green-400">
+    <button onClick={createNewHabit} className="mt-6 rounded-lg p-4 flex items-center justify-center gap-3 font-semibold bg-green-600 hover:bg-green-400">
       <Check size={20} weight="bold" />
       Confirmar</button>
   </form>

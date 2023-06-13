@@ -2,6 +2,7 @@ import './styles/global.css'
 import './lib/dayjs'
 import Login from './components/Login'
 import Home from './pages/Home'
+import Info from './pages/Info'
 
 import {
   BrowserRouter as Router,
@@ -16,6 +17,7 @@ export function App() {
   <Routes>
     <Route path="/login" element={<Login />} />
     <Route path="/" element={<Home />} />
+    <Route path="/info" element={<Info />} />
   </Routes>
   </Router>
   )
