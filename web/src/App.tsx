@@ -5,16 +5,17 @@ import { Route, Routes } from 'react-router-dom'
 import Login from './components/Login'
 import { Config } from './components/Config'
 import { AuthContextProvider } from './context/AuthContext'
-
+import SignUp from './components/SignUp'
 
 export function App() {
 
   return (
     <AuthContextProvider>
       <Routes>
-        <Route path="/" element={ <Home /> } />
         <Route path="/login" element={ <Login /> } />
+        <Route path="/" element={ <Home /> } />
         <Route path="/config" element={ <Config /> } />
+        <Route path="/sign" element={ <SignUp /> } />
       </Routes>
     </AuthContextProvider>
    

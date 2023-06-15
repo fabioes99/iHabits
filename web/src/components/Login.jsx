@@ -29,6 +29,11 @@ export default function Login() {
     }
   }
 
+  const redirectCriar = async(e) =>{
+    navigate('/sign')
+  }
+
+  /*     background-color: #211b30 */
   return (
     <div style={{ marginLeft: '35%', marginTop: '2%' }} className=" border border-violet-500 rounded-lg font-semibold  px-6 py-4 items-center gap-3 flex flex-col w-96 ">
         <img src={LogoImage} alt="" />
@@ -43,7 +48,7 @@ export default function Login() {
         </form>
         <div className="flex flex-row justify-between items-center mt-5">
           <button className="cursor-pointer font-normal text-base leading-5 text-yellow-300">Esqueci a minha senha</button>
-          <button className="cursor-pointer font-normal text-base leading-5 text-purple-500 pl-10">Criar a conta</button>
+          <button onClick={redirectCriar} className="cursor-pointer font-normal text-base leading-5 text-purple-500 pl-10">Criar a conta</button>
         </div>
       </div>
   )
