@@ -1,4 +1,4 @@
-import { EnvelopeSimple, Keyhole, Password } from "phosphor-react"
+import { EnvelopeSimple, Keyhole } from "phosphor-react"
 import Input from "./Input"
 import LogoImage from '../assets/logo.svg'
 import { useState } from "react"
@@ -11,33 +11,31 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [error, setError] = useState("");
-  const [user, setUser ] = useState({});
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const { createUser } = UserAuth();
+  const { redirectLogin } = UserAuth();
 
-  const handleSubmit = async(e) =>{
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setError('')
-    try{
-      const user = await createUser(email,senha)
-      console.log(user)
+    try {
+      await signIn(email, password)
       navigate('/')
-    }catch(e){
+    } catch (e) {
       setError(e.message)
       console.log(e.message)
     }
-  }
+  };
 
   const redirectCriar = async(e) =>{
-    navigate('/sign')
+    navigate('/create')
   }
 
   /*     background-color: #211b30 */
   return (
     <div style={{ marginLeft: '35%', marginTop: '2%' }} className=" border border-violet-500 rounded-lg font-semibold  px-6 py-4 items-center gap-3 flex flex-col w-96 ">
         <img src={LogoImage} alt="" />
-        <div className="font-bold text-2xl mb-5 leading-11 mt-6">Faca seu cadastro</div>
+        <div className="font-bold text-2xl mb-5 leading-11 mt-6">Ja tem cadastro?</div>
         <div className="font-normal text-base mb-9 leading-6">Faca seu login e controle seus habitos</div>
         <form onSubmit={handleSubmit}>
           <Input name="email" onChange={(event) => {setEmail(event.target.value)}}  placeholder="E-mail" leftIcon={<EnvelopeSimple size={32} />} />

@@ -5,7 +5,8 @@ import { Route, Routes } from 'react-router-dom'
 import Login from './components/Login'
 import { Config } from './components/Config'
 import { AuthContextProvider } from './context/AuthContext'
-import SignUp from './components/SignUp'
+import CreateAcc from './components/Create'
+import ProtectedRoute from './components/ProtectedRoute'
 
 export function App() {
 
@@ -13,9 +14,9 @@ export function App() {
     <AuthContextProvider>
       <Routes>
         <Route path="/login" element={ <Login /> } />
-        <Route path="/" element={ <Home /> } />
-        <Route path="/config" element={ <Config /> } />
-        <Route path="/sign" element={ <SignUp /> } />
+        <Route path="/" element={ <ProtectedRoute><Home /></ProtectedRoute> } />
+        <Route path="/config" element={ <ProtectedRoute><Config /></ProtectedRoute> } />
+        <Route path="/create" element={ <CreateAcc /> } />
       </Routes>
     </AuthContextProvider>
    

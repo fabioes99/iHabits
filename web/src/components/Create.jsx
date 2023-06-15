@@ -6,7 +6,7 @@ import { UserAuth } from "../context/AuthContext"
 import {  useNavigate } from 'react-router-dom'
 
 
-export default function SignUp() {
+export default function CreateAcc() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -14,12 +14,25 @@ export default function SignUp() {
   const [user, setUser ] = useState({});
   const navigate = useNavigate()
 
+  const { createUser } = UserAuth();
+
   const handleClick = async(e) =>{
     e.preventDefault()
      navigate('/login')
   }
 
-  const { redirectLogin } = UserAuth();
+  const handleSubmit = async(e) =>{
+    e.preventDefault()
+    setError('')
+    try{
+      const user = await createUser(email,senha)
+      console.log(user)
+      navigate('/')
+    }catch(e){
+      setError(e.message)
+      console.log(e.message)
+    }
+  }
 
   /*     background-color: #211b30 */
   return (
@@ -27,7 +40,7 @@ export default function SignUp() {
         <img src={LogoImage} alt="" />
         <div className="font-bold text-2xl mb-5 leading-11 mt-6">Crie sua conta</div>
         <div className="font-normal text-base mb-9 leading-6">Crie sua conta e comece a mudar de vida!</div>
-        <form >
+        <form onSubmit={handleSubmit} >
           <div className="">
             <Input name="nome" onChange={(event) => {setNome(event.target.value)}}  placeholder="Nome completo" leftIcon={<User size={32} />} />
             <Input name="email" onChange={(event) => {setEmail(event.target.value)}}  placeholder="E-mail" leftIcon={<EnvelopeSimple size={32} />} />
