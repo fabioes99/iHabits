@@ -7,6 +7,7 @@ import { Config } from './components/Config'
 import { AuthContextProvider } from './context/AuthContext'
 import CreateAcc from './components/Create'
 import ProtectedRoute from './components/ProtectedRoute'
+import Info from './pages/Info'
 
 export function App() {
 
@@ -17,6 +18,7 @@ export function App() {
         <Route path="/" element={ <ProtectedRoute><Home /></ProtectedRoute> } />
         <Route path="/config" element={ <ProtectedRoute><Config /></ProtectedRoute> } />
         <Route path="/create" element={ <CreateAcc /> } />
+        <Route path="/info" element={ <Info /> } />
       </Routes>
     </AuthContextProvider>
    

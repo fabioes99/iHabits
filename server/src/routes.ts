@@ -39,10 +39,11 @@ export async function appRoutes(app: FastifyInstance){
     const { date } = getDayParams.parse(request.query)
     //request.query signfica que os parametros da query seroa passados pela url 
 
-    //todos habitos possiveis naquele 
+    //todos habitos possiveis naquele dia
     //e habitos que ja foram completados
     const parsedDate = dayjs(date).startOf('day');
     const weekDay = parsedDate.get('day');
+    
     const possibleHabits = await prisma.habit.findMany({
       where: {
         created_at: {
@@ -85,13 +86,14 @@ export async function appRoutes(app: FastifyInstance){
     const {id} = toggleHabitParams.parse(request.params)
     // logica para permitir so atualizar habitos na data do dia, nao sendo retroativo
     const today = dayjs().startOf('day').toDate();
-
+    
     let day = await prisma.day.findUnique({
       where: {
         date: today,
       }
     })
-
+    
+    
     if(!day){
       day = await prisma.day.create({
         data: {
@@ -109,29 +111,34 @@ export async function appRoutes(app: FastifyInstance){
       }
     })
 
-    if(dayHabit){
-      //se tiver o habito no dia, remove a marcacao
-      await prisma.dayHabit.delete({
-        where: {
-          id: dayHabit.id,
-        }
-      })
-    }else{
-      await prisma.dayHabit.create({
-        data: {
-          day_id: day.id,
-          habit_id: id,
-        }
-      })
-    }
+    const data1 = dayjs(day.date);
+    const data2 = dayjs(today);
 
+    if(data1.isSame(data2, 'day')){
+      if(dayHabit){
+        //se tiver o habito no dia, remove a marcacao
+        await prisma.dayHabit.delete({
+          where: {
+            id: dayHabit.id,
+          }
+        })
+      }else{
+        await prisma.dayHabit.create({
+          data: {
+            day_id: day.id,
+            habit_id: id,
+          }
+        })
+      }
+    }
    
   })
 
 
   app.get('/summary', async () => {
     //retornar um array de objetos [ { date , amount, completed}, {}, {}]
-
+    app.log.level = 'info';
+    app.log.info('Requisição GET recebida em /');
     const summary = await prisma.$queryRaw`
     SELECT d.id, d.date, ( 
       SELECT 
@@ -150,5 +157,70 @@ export async function appRoutes(app: FastifyInstance){
 
     return summary;
   });
+
+  app.post('/notification', async (request)=> {
+    const createNotificationBody = z.object({
+      title: z.string(),
+      body: z.string(),
+      payload: z.string(),
+      habitId: z.string(),
+      time: z.string()
+    })
+
+    const today = dayjs().startOf('day').toDate();
+
+    const { title, body, payload, habitId, time } = createNotificationBody.parse(request.body)
+    const notification = await prisma.notification.create({
+      data: {
+        title,
+        body,
+        payload,
+        time,
+        created_at: today,
+      }
+    })
+
+    if(notification){
+      await prisma.notification_habit.create({
+        data: {
+          notification_id: notification.id,
+          habit_id: habitId
+        }
+      })
+    }
+
+    return notification;
+  })
+
+  app.get('/notification', async (request)=> {
+    const getDayParams = z.object({
+      id: z.string()
+    })
+
+    const { id } = getDayParams.parse(request.query)
+
+    const seuNumero: number = parseInt(id, 10);
+    
+    const habitNotification = await prisma.notification_habit.findFirst({
+      where: {
+        notification_id: seuNumero,
+      },
+      include: {
+        habit: {
+          select: {
+            title: true
+          }
+        },
+        Notification: {
+          select: {
+            time: true
+          }
+        }
+      }
+    });
+
+
+    return habitNotification;
+  })
 }
 

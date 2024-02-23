@@ -18,10 +18,38 @@ model Habit {
   id           String         @id @default(uuid())
   title        String
   created_at   DateTime
+
   dayHabits    DayHabit[]
   weekDays habitWeekDay[]
+  notificationhHabit notification_habit[]
 
   @@map("habits")
+}
+
+model notification {
+  id          Int         @id @default(autoincrement())
+  title       String
+  body        String
+  payload     String
+  time        String
+  created_at  DateTime
+
+  notification notification_habit[]
+
+  @@map("notificacao")
+}
+
+model notification_habit {
+  id               String     @id @default(uuid())
+  notification_id  Int
+  habit_id         String
+
+  Notification notification   @relation(fields: [notification_id], references: [id])
+  habit Habit @relation(fields: [habit_id], references: [id])
+
+  @@unique([notification_id, habit_id])
+
+  @@map("notificacao_habit")
 }
 
 model Day {

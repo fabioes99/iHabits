@@ -2,13 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDqwweBDIvoKHGqRQ-jAr1G5hizkE7iXD4",
-  authDomain: "ihealth-ad8cb.firebaseapp.com",
-  projectId: "ihealth-ad8cb",
-  storageBucket: "ihealth-ad8cb.appspot.com",
-  messagingSenderId: "344196458545",
-  appId: "1:344196458545:web:dcefb29f541a1257128d10",
-  measurementId: "G-MNC7X516DK"
+  apiKey: "AIzaSyB9kbpckJ7a5GojL4mIYHJl4E4JD9_BN8M",
+  authDomain: "auth-tg-79ec8.firebaseapp.com",
+  projectId: "auth-tg-79ec8",
+  storageBucket: "auth-tg-79ec8.appspot.com",
+  messagingSenderId: "723854990288",
+  appId: "1:723854990288:web:a640a5b7f010e3114277d5"
 };
 
 const app = initializeApp(firebaseConfig);

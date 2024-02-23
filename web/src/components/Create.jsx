@@ -10,6 +10,7 @@ export default function CreateAcc() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [nome, setNome] = useState("");
   const [error, setError] = useState("");
   const [user, setUser ] = useState({});
   const navigate = useNavigate()

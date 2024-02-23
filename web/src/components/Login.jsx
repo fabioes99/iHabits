@@ -13,13 +13,13 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const { redirectLogin } = UserAuth();
+  const { redirectLogin, signIn } = UserAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('')
     try {
-      await signIn(email, password)
+      await signIn(email, senha)
       navigate('/')
     } catch (e) {
       setError(e.message)
@@ -44,6 +44,9 @@ export default function Login() {
             <button type="submit" className=" w-full rounded-full text-white border-2 border-purple-500 py-2 px-4 text-lg font-bold capitalize bg-purple-500 text-center hover:bg-purple-600" >Entrar</button>
           </div>
         </form>
+        <div>
+            {error}
+          </div>
         <div className="flex flex-row justify-between items-center mt-5">
           <button className="cursor-pointer font-normal text-base leading-5 text-yellow-300">Esqueci a minha senha</button>
           <button onClick={redirectCriar} className="cursor-pointer font-normal text-base leading-5 text-purple-500 pl-10">Criar a conta</button>

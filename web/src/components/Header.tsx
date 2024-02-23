@@ -16,6 +16,8 @@ export function Header() {
   const navigate = useNavigate();
   const { user, logout } = UserAuth();
 
+  console.log(user);
+
   const handleLogout = async () => {
     try{
       await logout()
